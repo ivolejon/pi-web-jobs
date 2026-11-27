@@ -1,0 +1,39 @@
+{
+  "name": "pi-web-jobs",
+  "version": "0.1.0",
+  "description": "A PI WEB tab that shows the selected workspace's jobctl jobs, their schedules, running runs, logs, and run/stop actions.",
+  "license": "MIT",
+  "type": "module",
+  "keywords": [
+    "pi-package",
+    "pi-web.dev-plugin",
+    "pi-web",
+    "jobs",
+    "jobctl",
+    "scheduler"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ivolejon/pi-web-jobs.git"
+  },
+  "piWeb": {
+    "plugins": [
+      {
+        "id": "jobs",
+        "browserRoot": "browser",
+        "module": "browser/pi-web-plugin.js",
+        "serverModule": "server/plugin.js",
+        "machineSpecific": true
+      }
+    ]
+  },
+  "scripts": {
+    "test": "node --test"
+  },
+  "files": [
+    "browser",
+    "server",
+    "README.md",
+    "LICENSE"
+  ]
+}

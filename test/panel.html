@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Jobs panel preview</title>
+  <style>
+    /* The host supplies these through the stylesheet integration. This preview does not. */
+    :root { font-family: ui-sans-serif, system-ui, sans-serif; color: #1c2024; background: #fff; }
+    body { margin: 0; }
+    .ui-button { font: inherit; padding: 5px 10px; border: 1px solid #c8ccd0; border-radius: 6px; background: #fff; cursor: pointer; }
+    .ui-button:disabled { opacity: .5; cursor: default; }
+  </style>
+</head>
+<body>
+  <jobs-panel id="panel"></jobs-panel>
+  <script type="module">
+    import { defineJobsPanel } from "../browser/jobs-panel.js";
+
+    defineJobsPanel();
+
+    const now = Date.now();
+    const ago = (minutes) => new Date(now - minutes * 60_000).toISOString();
+    const ahead = (hours) => new Date(now + hours * 3_600_000).toISOString();
+    const jobs = [
+      {
+        name: "nightly-gate",
+        schedule: "daily 02:00",
+        enabled: true,
+        locks: ["heavy"],
+        status: "running",
+        startedAt: ago(8),
+        durationSeconds: null,
+        nextAt: ahead(17),
+        runId: "20261127T195422Z-a1b2c3",
+        running: true,
+      },
+      {
+        name: "go-test",
+        schedule: "every 30m",
+        enabled: true,
+        locks: ["go-test"],
+        status: "passed",
+        startedAt: ago(42),
+        durationSeconds: 7.04,
+        nextAt: ahead(1),
+        runId: "20261127T191000Z-d4e5f6",
+        running: false,
+      },
+      {
+        name: "web-unit",
+        schedule: "weekly mon,thu 03:00",
+        enabled: false,
+        locks: ["web-unit"],
+        status: "failed",
+        startedAt: ago(90),
+        durationSeconds: 12.3,
+        nextAt: null,
+        runId: "20261127T183000Z-0a1b2c",
+        running: false,
+      },
+      {
+        name: "manual-smoke",
+        schedule: "",
+        enabled: true,
+        locks: ["manual-smoke"],
+        status: "never",
+        startedAt: null,
+        durationSeconds: null,
+        nextAt: null,
+        runId: null,
+        running: false,
+      },
+    ];
+
+    const data = {
+      version: 1,
+      config: { path: "/srv/example/jobs.toml", exists: true },
+      stateDir: "/root/.local/state/jobctl",
+      jobs,
+    };
+
+    const peer = {
+      async request(operation, input) {
+        if (operation === "overview") return data;
+        if (operation === "logs") {
+          return {
+            name: input.name,
+            runId: "20261127T195422Z-a1b2c3",
+            status: "running",
+            log: "nightly gate: testing a8471736\nnightly gate: decision: run\nnightly gate: round: 20261127T155422Z-a8471736\n...\n",
+          };
+        }
+        return { message: "ok" };
+      },
+    };
+
+    document.getElementById("panel").context = {
+      workspace: { id: "w", projectId: "p", label: "example" },
+      machine: { id: "local" },
+      peer,
+    };
+  </script>
+</body>
+</html>
