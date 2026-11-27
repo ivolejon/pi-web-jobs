@@ -33,13 +33,19 @@ or delete runs. Scheduling stays with systemd and launchd.
 
 ## Install
 
-The package is not published yet. From a clone:
+Until the package is on npm, install it from the repository:
+
+```bash
+pi install git:github.com/ivolejon/pi-web-jobs
+# When the daemon can restart:
+# systemctl --user restart pi-web-sessiond
+```
+
+For local development, link a clone instead:
 
 ```bash
 git clone https://github.com/ivolejon/pi-web-jobs.git
 ln -sfn "$(pwd)/pi-web-jobs" ~/.pi-web/plugins/jobs
-# When the daemon can restart:
-# systemctl --user restart pi-web-sessiond
 ```
 
 Then reload the browser and enable **Jobs** under **Settings → PI WEB plugins** if it is not enabled by
@@ -47,7 +53,7 @@ default. On a machine where `PI_WEB_DATA_DIR` is set, link into `$PI_WEB_DATA_DI
 
 Restarting the session daemon interrupts active sessions and terminals. Finish important work first.
 
-When the package is published, the same steps are:
+When the package is published on npm, the steps are:
 
 ```bash
 pi install npm:pi-web-jobs
